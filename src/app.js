@@ -4,8 +4,8 @@ var app = express();
 express.json();
 
 app.get('/', (req, res) => {
-  console.log("here!!")
-  res.json({lol: "lol"});
+  console.log("here!")
+  res.json({success: true});
 })
 
 app.post('/file-upload', (req, res) => {
@@ -18,16 +18,14 @@ app.post('/file-upload', (req, res) => {
       const buffer = fs.readFileSync(path);
       const type = await fileType.fromBuffer(buffer);
 
-      // const timestamp = Date.now().toString();
-      // const fileName = `${timestamp}-lg`;
-      // const data = await uploadFile(buffer, fileName, type);
+    
       return res.status(200).send(data);
     } catch (error) {
       return res.status(400).send(error);
     }
   });
   
-  res.json({lol: "lol-post"});
+  res.json({success: true});
 })
 
 app.listen(3000, () => {
