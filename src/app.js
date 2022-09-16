@@ -2,6 +2,15 @@ var express = require('express');
 var app = express();
 
 express.json();
+var bodyParser = require('body-parser');
+var multer = require('multer');
+var forms = multer();
+const fs = require("fs");
+// apply them
+
+app.use(bodyParser.json());
+app.use(forms.array()); 
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   console.log("here!")
@@ -10,24 +19,17 @@ app.get('/', (req, res) => {
 
 app.post('/file-upload', (req, res) => {
   console.log("in post request");
-  const form = new multiparty.Form();
-  form.parse(req, async (error, fields, files) => {
-    if (error) throw new Error(error);
-    try {
-      const path = files.file[0].path;
-      const buffer = fs.readFileSync(path);
-      const type = await fileType.fromBuffer(buffer);
+  const buffer = Buffer.from(req.body.image, "base64");
 
-    
-      return res.status(200).send(data);
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-  });
-  
+  var dir = "images/" + req.body.category
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(dir + "/" + Date.now() + ".JPEG", buffer)
+
   res.json({success: true});
 })
 
-app.listen(3000, () => {
-  console.log('Server is up on port '+ 3000);
+app.listen(5000, () => {
+  console.log('Server is up on port '+ 5000);
 })
