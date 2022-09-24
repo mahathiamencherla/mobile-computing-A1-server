@@ -30,6 +30,6 @@ app.post('/file-upload', (req, res) => {
   res.json({success: true});
 })
 
-app.listen(5000, () => {
-  console.log('Server is up on port '+ 5000);
+app.listen(3000, '0.0.0.0', () => {
+  console.log('Server is up on port '+ 3000);
 })
