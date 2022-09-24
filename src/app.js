@@ -18,13 +18,22 @@ app.get('/', (req, res) => {
 })
 
 app.post('/file-upload', (req, res) => {
-  const buffer = Buffer.from(req.body.image, "base64");
+  const { image, category } = req.body;
 
-  var dir = "images/" + req.body.category
-  if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir, { recursive: true });
+  try {
+    const buffer = Buffer.from(image, "base64");
+
+    var dir = "images/" + category
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(dir + "/" + Date.now() + ".JPEG", buffer)
+
+  } catch (e) {
+    console.log("Image upload into folder error ", e);
+    res.json({success: false});
   }
-  fs.writeFileSync(dir + "/" + Date.now() + ".JPEG", buffer)
+  
 
   res.json({success: true});
 })
